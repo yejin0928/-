@@ -1,0 +1,13 @@
+CREATE OR REPLACE PROCEDURE getRecipe
+/* IN Parameter */
+( 
+p_cursor OUT SYS_REFCURSOR
+)
+IS
+
+BEGIN
+
+OPEN p_cursor FOR
+SELECT * from recommand_dishes;
+END;
+/ 

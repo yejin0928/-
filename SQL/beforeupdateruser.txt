@@ -1,0 +1,29 @@
+CREATE OR REPLACE TRIGGER BEFOREUPDATERUSER
+BEFORE UPDATE ON r_user
+ FOR EACH ROW
+DECLARE
+ invalid_rpass EXCEPTION;
+ invalid_rname EXCEPTION;
+ nIndex1 NUMBER;
+ nIndex2 NUMBER;
+
+  BEGIN
+
+
+  SELECT LENGTH( :new.user_pwd)
+  INTO nIndex1
+  FROM DUAL;
+  IF nIndex1< 4 THEN
+  RAISE invalid_rpass;
+  ELSIF  :new.user_name =  :old.user_name THEN
+  RAISE invalid_rname;
+  END IF;
+
+  EXCEPTION
+  WHEN  invalid_rpass THEN
+  RAISE_APPLICATION_ERROR(-20290, '패스워드는 길이가 4이상이어야 합니다.');
+  WHEN  invalid_rname THEN
+  RAISE_APPLICATION_ERROR(-20291, '이름은 기존과 동일하게 변경될 수 없습니다.');
+
+  END;
+   /

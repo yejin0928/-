@@ -1,0 +1,85 @@
+INSERT INTO R_USER VALUES('admin','0000','admin');
+INSERT INTO R_USER VALUES('yejin','1111','yejin');
+
+
+INSERT INTO FOOD_TYPE VALUES('과일');
+INSERT INTO FOOD_TYPE VALUES('채소');
+INSERT INTO FOOD_TYPE VALUES('정육');
+INSERT INTO FOOD_TYPE VALUES('수산');
+INSERT INTO FOOD_TYPE VALUES('유제품');
+INSERT INTO FOOD_TYPE VALUES('양념류');
+INSERT INTO FOOD_TYPE VALUES('음료');
+INSERT INTO FOOD_TYPE VALUES('기타');
+INSERT INTO FOOD_TYPE VALUES('절임류');
+INSERT INTO FOOD_TYPE VALUES('냉동식품');
+INSERT INTO FOOD_TYPE VALUES('빵류');
+INSERT INTO FOOD_TYPE VALUES('조리식품');
+
+INSERT INTO REFRIGERATOR VALUES('오렌지','2020-12-05','2020-12-11','admin');
+INSERT INTO REFRIGERATOR VALUES('사과','2020-12-04','2020-12-10','admin');
+INSERT INTO REFRIGERATOR VALUES('오이','2020-12-03','2020-12-09','admin');
+INSERT INTO REFRIGERATOR VALUES('당근','2020-12-02','2020-12-08','admin');
+INSERT INTO REFRIGERATOR VALUES('오징어','2020-12-01','2020-12-07','admin');
+INSERT INTO REFRIGERATOR VALUES('꽁치','2020-11-30','2020-12-06','admin');
+INSERT INTO REFRIGERATOR VALUES('소고기','2020-11-29','2020-12-05','admin');
+INSERT INTO REFRIGERATOR VALUES('계란','2020-11-28','2020-12-04','admin');
+INSERT INTO REFRIGERATOR VALUES('우유','2020-11-27','2020-12-03','admin');
+INSERT INTO REFRIGERATOR VALUES('치즈','2020-11-26','2020-12-02','admin');
+
+
+INSERT INTO REFRIGERATOR VALUES('요거트','2020-12-05','2020-12-20','admin');
+INSERT INTO REFRIGERATOR VALUES('케찹','2020-12-06','2020-12-21','admin');
+INSERT INTO REFRIGERATOR VALUES('마요네즈','2020-12-07','2020-12-22','admin');
+INSERT INTO REFRIGERATOR VALUES('김치','2020-12-08','2020-12-23','admin');
+INSERT INTO REFRIGERATOR VALUES('매실장아찌','2020-12-09','2020-12-24','admin');
+INSERT INTO REFRIGERATOR VALUES('돈까스','2020-12-10','2020-12-25','admin');
+INSERT INTO REFRIGERATOR VALUES('냉동만두','2020-12-11','2020-12-26','admin');
+INSERT INTO REFRIGERATOR VALUES('식빵','2020-12-12','2020-12-27','admin');
+INSERT INTO REFRIGERATOR VALUES('탄산음료','2020-12-13','2020-12-28','admin');
+INSERT INTO REFRIGERATOR VALUES('두부','2020-12-14','2020-12-29','admin');
+
+
+
+
+
+INSERT INTO FOOD VALUES(10,'오렌지','과일');
+INSERT INTO FOOD VALUES(14,'사과','과일');
+INSERT INTO FOOD VALUES(7,'오이','채소');
+INSERT INTO FOOD VALUES(10,'당근','채소');
+INSERT INTO FOOD VALUES(7,'오징어','수산');
+INSERT INTO FOOD VALUES(7,'꽁치','수산');
+INSERT INTO FOOD VALUES(7,'소고기','정육');
+INSERT INTO FOOD VALUES(180,'케찹','양념류');
+INSERT INTO FOOD VALUES(180,'마요네즈','양념류');
+INSERT INTO FOOD VALUES(365,'김치','절임류');
+INSERT INTO FOOD VALUES(365,'매실장아찌','절임류');
+INSERT INTO FOOD VALUES(7,'돈까스','조리식품');
+INSERT INTO FOOD VALUES(30,'탄산음료','음료');
+
+INSERT INTO FOOD VALUES(10,'우유','유제품');
+INSERT INTO FOOD VALUES(3,'식빵','빵류');
+INSERT INTO FOOD VALUES(180,'치즈','유제품');
+INSERT INTO FOOD VALUES(20,'계란','정육');
+INSERT INTO FOOD VALUES(14,'두부','기타');
+INSERT INTO FOOD VALUES(10,'요거트','유제품');
+INSERT INTO FOOD VALUES(270,'냉동만두','냉동식품');
+
+
+INSERT INTO RECOMMAND_DISHES VALUES('사과파이','1.중력분,소금,분유, 설탕을 한꺼번에 같이 가볍게 섞어준다.
+ 2. 1번에 버터를 넣고 스크레이퍼를 사용해 버터를 콩알 크기로 다져준다.
+ 3. 찬물을 조금씩 넣으면서 반죽을 한덩어리고 만든뒤 냉장고에서 20~30분간 휴지
+ 4. 0.3cm 정도의 두께로 밀어펴서 파이틀에 성형
+ 5. 밑면에 작은 구멍을 낸뒤 파이팬안의 반죽안에 충전물 넣기
+ 6. 파이 윗면을 성형해 덮은후 210~220도의 오븐에 강하게 20~30분 굽기 ','중력분 200g, 설탕 12g, 소금 6g, 버터 180g, 분유 8g, 찬물 140g, 사과 450g, 설탕 80g, 소금3g, 계피 5g, 옥수수전문40g, 물 225g, 버터 10g');
+INSERT INTO RECOMMAND_DISHES VALUES('사과잼','
+1.사과를 식초물에 담가 15-20분 정도 둔다. 2. 사과를 먹기좋게 자른다. 3.냄비에 넣고 끓인다. 4.설탕은 사과양의 3분의 1을 넣는다. 5.졸여지면 꺼내 용기에 담는다.','사과 10개, 레몬 1개, 설탕, 계피가루');
+
+INSERT INTO RECOMMAND_DISHES VALUES('당근머핀','1.오일과 계란을 함께 섞어준다 2.설탕은 2번에 나눠서 넣고 섞는다. 3.박력분과 베이킹 파우더 시나몬 가루를 체쳐서 넣고 섞는다. 4.당근을 잘게 다진다.
+5.한주걱씩 담아 180도 오븐에서 20분간 굽는다','오일70g, 설탕60g, 계란1개, 당근40g, 박력분100g, 베이킹2g, 시나몬가루5g');
+
+
+INSERT INTO RECOMMAND_DISHES VALUES('당근쿠키','1.당근을 씻어 껍질을 벗긴다. 2.적당한 크기로 잘라 그릇에 담고 전자렌지에 3분 돌린다.
+ 3.익힌 당근은 식힌 후 믹서기를 이용해 다져준다. 4.그릇에 밀가루 4, 핫케이크 4, 그리고 설탕 1, 소금 약간을 넣고 갈아놓은 
+당근, 건포도, 다진아몬드를 넣는다. 5.카놀라유를 넣어서 반죽 농도를 맞춘다 6. 170도 오븐에서 20분정도 굽는다.','당근, 핫케이크가루, 밀가루, 설탕, 건포도, 아몬드, 소금, 카놀라유');
+
+commit;

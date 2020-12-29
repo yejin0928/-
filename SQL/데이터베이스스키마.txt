@@ -1,0 +1,366 @@
+
+CREATE TABLE FOOD
+(
+	Average_bestBefore    NUMBER  NOT NULL  CONSTRAINT  BEST_BEFORE_135998499 CHECK (Average_bestBefore > 0),
+	Food_name             CHAR(30)  NOT NULL ,
+	Type_name             CHAR(30)  NOT NULL 
+);
+
+
+
+CREATE UNIQUE INDEX XPKFOOD ON FOOD
+(Food_name  ASC);
+
+
+
+ALTER TABLE FOOD
+	ADD CONSTRAINT  XPKFOOD PRIMARY KEY (Food_name);
+
+
+
+CREATE TABLE FOOD_TYPE
+(
+	Type_name             CHAR(30)  NOT NULL  CONSTRAINT  Food_type_rule_419891215 CHECK (Type_name IN ('과일', '채소', '정육', '수산', '유제품', '양념류', '음료', '기타', '절임류', '냉동식품', '빵류', '조리식품'))
+);
+
+
+
+CREATE UNIQUE INDEX XPKFOOD_TYPE ON FOOD_TYPE
+(Type_name  ASC);
+
+
+
+ALTER TABLE FOOD_TYPE
+	ADD CONSTRAINT  XPKFOOD_TYPE PRIMARY KEY (Type_name);
+
+
+
+CREATE TABLE R_USER
+(
+	User_id               VARCHAR2(10)  NOT NULL ,
+	User_pwd              VARCHAR2(10)  NOT NULL ,
+	User_name             VARCHAR2(50)  NOT NULL 
+);
+
+
+
+CREATE UNIQUE INDEX XPKR_USER ON R_USER
+(User_id  ASC);
+
+
+
+ALTER TABLE R_USER
+	ADD CONSTRAINT  XPKR_USER PRIMARY KEY (User_id);
+
+
+
+CREATE TABLE RECOMMAND_DISHES
+(
+	DishesName            CHAR(30)  NOT NULL ,
+	Recipe                CHAR(500)  NOT NULL ,
+	Gredients             CHAR(500)  NOT NULL 
+);
+
+
+
+CREATE UNIQUE INDEX XPKRECOMMAND_DISHES ON RECOMMAND_DISHES
+(DishesName  ASC,Recipe  ASC,Gredients  ASC);
+
+
+
+ALTER TABLE RECOMMAND_DISHES
+	ADD CONSTRAINT  XPKRECOMMAND_DISHES PRIMARY KEY (DishesName,Recipe,Gredients);
+
+
+
+CREATE TABLE REFRIGERATOR
+(
+	Refrigerator_foodName  CHAR(30)  NOT NULL ,
+	Refrigerator_foodPurchaseDate  DATE  NOT NULL ,
+	Refrigerator_foodBestBefore  DATE  NOT NULL ,
+	User_id               VARCHAR2(10)  NOT NULL 
+);
+
+
+
+CREATE UNIQUE INDEX XPKREFRIGERATOR ON REFRIGERATOR
+(Refrigerator_foodName  ASC,User_id  ASC,Refrigerator_foodBestBefore  ASC,Refrigerator_foodPurchaseDate  ASC);
+
+
+
+ALTER TABLE REFRIGERATOR
+	ADD CONSTRAINT  XPKREFRIGERATOR PRIMARY KEY (Refrigerator_foodName,User_id,Refrigerator_foodBestBefore,Refrigerator_foodPurchaseDate);
+
+
+
+ALTER TABLE FOOD
+	ADD (CONSTRAINT  R_31 FOREIGN KEY (Type_name) REFERENCES FOOD_TYPE(Type_name));
+
+
+
+ALTER TABLE REFRIGERATOR
+	ADD (CONSTRAINT  R_27 FOREIGN KEY (User_id) REFERENCES R_USER(User_id));
+
+
+
+CREATE  TRIGGER tI_FOOD BEFORE INSERT ON FOOD for each row
+-- ERwin Builtin Tue Dec 15 01:41:18 2020
+-- INSERT trigger on FOOD 
+DECLARE NUMROWS INTEGER;
+BEGIN
+    /* ERwin Builtin Tue Dec 15 01:41:18 2020 */
+    /* FOOD_TYPE  FOOD on child insert restrict */
+    /* ERWIN_RELATION:CHECKSUM="0000f7e5", PARENT_OWNER="", PARENT_TABLE="FOOD_TYPE"
+    CHILD_OWNER="", CHILD_TABLE="FOOD"
+    P2C_VERB_PHRASE="R/31", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="R_31", FK_COLUMNS="Type_name" */
+    SELECT count(*) INTO NUMROWS
+      FROM FOOD_TYPE
+      WHERE
+        /* %JoinFKPK(:%New,FOOD_TYPE," = "," AND") */
+        :new.Type_name = FOOD_TYPE.Type_name;
+    IF (
+      /* %NotnullFK(:%New," IS NOT NULL AND") */
+      
+      NUMROWS = 0
+    )
+    THEN
+      raise_application_error(
+        -20002,
+        'Cannot insert FOOD because FOOD_TYPE does not exist.'
+      );
+    END IF;
+
+
+-- ERwin Builtin Tue Dec 15 01:41:18 2020
+END;
+/
+
+CREATE  TRIGGER tU_FOOD AFTER UPDATE ON FOOD for each row
+-- ERwin Builtin Tue Dec 15 01:41:18 2020
+-- UPDATE trigger on FOOD 
+DECLARE NUMROWS INTEGER;
+BEGIN
+  /* ERwin Builtin Tue Dec 15 01:41:18 2020 */
+  /* FOOD_TYPE  FOOD on child update restrict */
+  /* ERWIN_RELATION:CHECKSUM="0000f4b7", PARENT_OWNER="", PARENT_TABLE="FOOD_TYPE"
+    CHILD_OWNER="", CHILD_TABLE="FOOD"
+    P2C_VERB_PHRASE="R/31", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="R_31", FK_COLUMNS="Type_name" */
+  SELECT count(*) INTO NUMROWS
+    FROM FOOD_TYPE
+    WHERE
+      /* %JoinFKPK(:%New,FOOD_TYPE," = "," AND") */
+      :new.Type_name = FOOD_TYPE.Type_name;
+  IF (
+    /* %NotnullFK(:%New," IS NOT NULL AND") */
+    
+    NUMROWS = 0
+  )
+  THEN
+    raise_application_error(
+      -20007,
+      'Cannot update FOOD because FOOD_TYPE does not exist.'
+    );
+  END IF;
+
+
+-- ERwin Builtin Tue Dec 15 01:41:18 2020
+END;
+/
+
+
+CREATE  TRIGGER tD_FOOD_TYPE AFTER DELETE ON FOOD_TYPE for each row
+-- ERwin Builtin Tue Dec 15 01:41:18 2020
+-- DELETE trigger on FOOD_TYPE 
+DECLARE NUMROWS INTEGER;
+BEGIN
+    /* ERwin Builtin Tue Dec 15 01:41:18 2020 */
+    /* FOOD_TYPE  FOOD on parent delete restrict */
+    /* ERWIN_RELATION:CHECKSUM="0000ddf2", PARENT_OWNER="", PARENT_TABLE="FOOD_TYPE"
+    CHILD_OWNER="", CHILD_TABLE="FOOD"
+    P2C_VERB_PHRASE="R/31", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="R_31", FK_COLUMNS="Type_name" */
+    SELECT count(*) INTO NUMROWS
+      FROM FOOD
+      WHERE
+        /*  %JoinFKPK(FOOD,:%Old," = "," AND") */
+        FOOD.Type_name = :old.Type_name;
+    IF (NUMROWS > 0)
+    THEN
+      raise_application_error(
+        -20001,
+        'Cannot delete FOOD_TYPE because FOOD exists.'
+      );
+    END IF;
+
+
+-- ERwin Builtin Tue Dec 15 01:41:18 2020
+END;
+/
+
+CREATE  TRIGGER tU_FOOD_TYPE AFTER UPDATE ON FOOD_TYPE for each row
+-- ERwin Builtin Tue Dec 15 01:41:18 2020
+-- UPDATE trigger on FOOD_TYPE 
+DECLARE NUMROWS INTEGER;
+BEGIN
+  /* ERwin Builtin Tue Dec 15 01:41:18 2020 */
+  /* FOOD_TYPE  FOOD on parent update restrict */
+  /* ERWIN_RELATION:CHECKSUM="0001029a", PARENT_OWNER="", PARENT_TABLE="FOOD_TYPE"
+    CHILD_OWNER="", CHILD_TABLE="FOOD"
+    P2C_VERB_PHRASE="R/31", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="R_31", FK_COLUMNS="Type_name" */
+  IF
+    /* %JoinPKPK(:%Old,:%New," <> "," OR ") */
+    :old.Type_name <> :new.Type_name
+  THEN
+    SELECT count(*) INTO NUMROWS
+      FROM FOOD
+      WHERE
+        /*  %JoinFKPK(FOOD,:%Old," = "," AND") */
+        FOOD.Type_name = :old.Type_name;
+    IF (NUMROWS > 0)
+    THEN 
+      raise_application_error(
+        -20005,
+        'Cannot update FOOD_TYPE because FOOD exists.'
+      );
+    END IF;
+  END IF;
+
+
+-- ERwin Builtin Tue Dec 15 01:41:18 2020
+END;
+/
+
+
+CREATE  TRIGGER tD_R_USER AFTER DELETE ON R_USER for each row
+-- ERwin Builtin Tue Dec 15 01:41:18 2020
+-- DELETE trigger on R_USER 
+DECLARE NUMROWS INTEGER;
+BEGIN
+    /* ERwin Builtin Tue Dec 15 01:41:18 2020 */
+    /* R_USER  REFRIGERATOR on parent delete restrict */
+    /* ERWIN_RELATION:CHECKSUM="0000dfcd", PARENT_OWNER="", PARENT_TABLE="R_USER"
+    CHILD_OWNER="", CHILD_TABLE="REFRIGERATOR"
+    P2C_VERB_PHRASE="R/27", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="R_27", FK_COLUMNS="User_id" */
+    SELECT count(*) INTO NUMROWS
+      FROM REFRIGERATOR
+      WHERE
+        /*  %JoinFKPK(REFRIGERATOR,:%Old," = "," AND") */
+        REFRIGERATOR.User_id = :old.User_id;
+    IF (NUMROWS > 0)
+    THEN
+      raise_application_error(
+        -20001,
+        'Cannot delete R_USER because REFRIGERATOR exists.'
+      );
+    END IF;
+
+
+-- ERwin Builtin Tue Dec 15 01:41:18 2020
+END;
+/
+
+CREATE  TRIGGER tU_R_USER AFTER UPDATE ON R_USER for each row
+-- ERwin Builtin Tue Dec 15 01:41:18 2020
+-- UPDATE trigger on R_USER 
+DECLARE NUMROWS INTEGER;
+BEGIN
+  /* ERwin Builtin Tue Dec 15 01:41:18 2020 */
+  /* R_USER  REFRIGERATOR on parent update restrict */
+  /* ERWIN_RELATION:CHECKSUM="00010aad", PARENT_OWNER="", PARENT_TABLE="R_USER"
+    CHILD_OWNER="", CHILD_TABLE="REFRIGERATOR"
+    P2C_VERB_PHRASE="R/27", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="R_27", FK_COLUMNS="User_id" */
+  IF
+    /* %JoinPKPK(:%Old,:%New," <> "," OR ") */
+    :old.User_id <> :new.User_id
+  THEN
+    SELECT count(*) INTO NUMROWS
+      FROM REFRIGERATOR
+      WHERE
+        /*  %JoinFKPK(REFRIGERATOR,:%Old," = "," AND") */
+        REFRIGERATOR.User_id = :old.User_id;
+    IF (NUMROWS > 0)
+    THEN 
+      raise_application_error(
+        -20005,
+        'Cannot update R_USER because REFRIGERATOR exists.'
+      );
+    END IF;
+  END IF;
+
+
+-- ERwin Builtin Tue Dec 15 01:41:18 2020
+END;
+/
+
+
+CREATE  TRIGGER tI_REFRIGERATOR BEFORE INSERT ON REFRIGERATOR for each row
+-- ERwin Builtin Tue Dec 15 01:41:18 2020
+-- INSERT trigger on REFRIGERATOR 
+DECLARE NUMROWS INTEGER;
+BEGIN
+    /* ERwin Builtin Tue Dec 15 01:41:18 2020 */
+    /* R_USER  REFRIGERATOR on child insert restrict */
+    /* ERWIN_RELATION:CHECKSUM="0000ef89", PARENT_OWNER="", PARENT_TABLE="R_USER"
+    CHILD_OWNER="", CHILD_TABLE="REFRIGERATOR"
+    P2C_VERB_PHRASE="R/27", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="R_27", FK_COLUMNS="User_id" */
+    SELECT count(*) INTO NUMROWS
+      FROM R_USER
+      WHERE
+        /* %JoinFKPK(:%New,R_USER," = "," AND") */
+        :new.User_id = R_USER.User_id;
+    IF (
+      /* %NotnullFK(:%New," IS NOT NULL AND") */
+      
+      NUMROWS = 0
+    )
+    THEN
+      raise_application_error(
+        -20002,
+        'Cannot insert REFRIGERATOR because R_USER does not exist.'
+      );
+    END IF;
+
+
+-- ERwin Builtin Tue Dec 15 01:41:18 2020
+END;
+/
+
+CREATE  TRIGGER tU_REFRIGERATOR AFTER UPDATE ON REFRIGERATOR for each row
+-- ERwin Builtin Tue Dec 15 01:41:18 2020
+-- UPDATE trigger on REFRIGERATOR 
+DECLARE NUMROWS INTEGER;
+BEGIN
+  /* ERwin Builtin Tue Dec 15 01:41:18 2020 */
+  /* R_USER  REFRIGERATOR on child update restrict */
+  /* ERWIN_RELATION:CHECKSUM="0000f7b8", PARENT_OWNER="", PARENT_TABLE="R_USER"
+    CHILD_OWNER="", CHILD_TABLE="REFRIGERATOR"
+    P2C_VERB_PHRASE="R/27", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="R_27", FK_COLUMNS="User_id" */
+  SELECT count(*) INTO NUMROWS
+    FROM R_USER
+    WHERE
+      /* %JoinFKPK(:%New,R_USER," = "," AND") */
+      :new.User_id = R_USER.User_id;
+  IF (
+    /* %NotnullFK(:%New," IS NOT NULL AND") */
+    
+    NUMROWS = 0
+  )
+  THEN
+    raise_application_error(
+      -20007,
+      'Cannot update REFRIGERATOR because R_USER does not exist.'
+    );
+  END IF;
+
+
+-- ERwin Builtin Tue Dec 15 01:41:18 2020
+END;
+/
+

@@ -1,0 +1,21 @@
+CREATE OR REPLACE PROCEDURE getExpired
+/* IN Parameter */
+( 
+id IN VARCHAR2,
+p_cursor OUT SYS_REFCURSOR
+)
+IS
+count_num NUMBER;
+days_7 DATE;
+today DATE;
+auto_input DATE;
+
+BEGIN
+SELECT TO_CHAR(SYSDATE-7,'yyyy-mm-dd') INTO days_7 FROM DUAL;
+SELECT TO_CHAR(SYSDATE,'yyyy-mm-dd') INTO today FROM DUAL;
+
+OPEN p_cursor FOR
+SELECT * from REFRIGERATOR WHERE USER_ID=id AND 
+TO_CHAR(REFRIGERATOR_FOODBESTBEFORE,'yyyy-mm-dd')<today order by REFRIGERATOR_FOODBESTBEFORE desc;
+END;
+/ 
